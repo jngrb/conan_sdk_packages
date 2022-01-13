@@ -35,8 +35,12 @@ class DummyOpenSslConan(ConanFile):
     def package_info(self):
         self.cpp_info.names["cmake_find_package"] = "OpenSSL"
         self.cpp_info.names["cmake_find_package_multi"] = "OpenSSL"
-        self.cpp_info.components["ssl"].libs = ['ssl']
-        self.cpp_info.components["crypto"].libs = ['crypto']
+        if self.options.shared_openssl:
+            self.cpp_info.components["ssl"].libs = ['ssl']
+            self.cpp_info.components["crypto"].libs = ['crypto']
+        else:
+            self.cpp_info.components["ssl"].libs = ['libssl.a']
+            self.cpp_info.components["crypto"].libs = ['libcrypto.a']
 
         self.cpp_info.components["crypto"].system_libs.extend(["dl", "rt"])
         self.cpp_info.components["ssl"].requires = ["crypto"]
@@ -44,6 +48,7 @@ class DummyOpenSslConan(ConanFile):
         # at least on my Ubuntu 20.04
         self.cpp_info.components["crypto"].system_libs.append("pthread")
         self.cpp_info.components["ssl"].system_libs.append("pthread")
+
         self.cpp_info.components["crypto"].names["cmake_find_package"] = "Crypto"
         self.cpp_info.components["crypto"].names["cmake_find_package_multi"] = "Crypto"
         self.cpp_info.components["crypto"].names['pkg_config'] = 'libcrypto'

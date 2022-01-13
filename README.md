@@ -4,11 +4,13 @@
 
 ## Examples
 
-The example is taken from the openss test package in the [Conan Center Index](https://github.com/conan-io/conan-center-index/tree/master/recipes/openssl/1.x.x/test_package).
+The example is taken from the openssl test package in the [Conan Center Index](https://github.com/conan-io/conan-center-index/tree/master/recipes/openssl/1.x.x/test_package).
 
 ### Pure CMAKE
 
 Consume the system library using pure CMake.
+
+* [CMake listing](pure_cmake/CMakeLists.txt)
 
 ```[bash]
 sudo apt-get install build_essential make gcc cmake libssl-dev
@@ -25,6 +27,9 @@ make
 
 Consume the openssl library via conan-center-index using conan and CMake.
 
+* [Conan recipe](conan_center_index/conanfile.py)
+* [CMake listing](conan_center_index/CMakeLists.txt)
+
 ```[bash]
 sudo apt-get install python3 python3-pip
 pip3 install conan==1.43.2
@@ -39,6 +44,9 @@ Consumer cannot override to use the openssl provided by the distribution.
 
 Consume the openssl library via conan-center-index using conan and CMake.
 
+* [Conan recipe](conan_from_system/conanfile.py)
+* [CMake listing](conan_from_system/CMakeLists.txt)
+
 ```[bash]
 cd conan_from_system
 export CONAN_SYSREQUIRES_MODE=enabled
@@ -48,6 +56,25 @@ conan create .
 Consumer cannot override to use conan.
 
 ### Have a dummy system package
+
+Dummy openssl package:
+
+* [Conan recipe](dummy_system_package/openssl_system/conanfile.py)
+
+Intermediate library:
+
+* [Conan recipe](dummy_system_package/digest_lib/conanfile.py)
+* [CMake listing](dummy_system_package/digest_lib/CMakeLists.txt)
+
+Consumer prefering conan:
+
+* [Conan recipe](dummy_system_package/consumer_cci/conanfile.py)
+* [CMake listing](dummy_system_package/consumer_cci/CMakeLists.txt)
+
+Consumer prefering system:
+
+* [Conan recipe](dummy_system_package/consumer_system/conanfile.py)
+* [CMake listing](dummy_system_package/consumer_system/CMakeLists.txt)
 
 ```[bash]
 cd dummy_system_package
@@ -66,13 +93,14 @@ conan create . --build=missing # digest_lib should be re-built
 
 Result:
 
-* The consumer can decide where the OpenSSL library should come from.
-* No a single adaption in the intermediate library needed!
+* The consumer can decide where the OpenSSL library should come from. The difference is a *single line of code*: the requirement override in the consuming conan recipe.
+* **No a single adaption in the intermediate library needed!**
 * See the digest executable an the respective 'bin' subfolders of the produced packages. Check ldd of these and execute them.
 
 Conditions:
 
 * "system" package should have the same name as the CCI package so that override works
+* the (most iumportant) options of the CCI package should be reflected in the dummy package (here: option *shared*)
 
 ## License
 
