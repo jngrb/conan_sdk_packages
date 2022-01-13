@@ -57,16 +57,22 @@ cd ..
 cd digest_lib
 conan create .
 cd ..
-cd conaumer_cci
+cd consumer_cci
 conan create .
 cd ..
-cd conaumer_system
+cd consumer_system
 conan create . --build=missing # digest_lib should be re-built
 ```
 
+Result:
+
+* The consumer can decide where the OpenSSL library should come from.
+* No a single adaption in the intermediate library needed!
+* See the digest executable an the respective 'bin' subfolders of the produced packages. Check ldd of these and execute them.
+
 Conditions:
 
-* same name as the CCI package so that override works
+* "system" package should have the same name as the CCI package so that override works
 
 ## License
 
