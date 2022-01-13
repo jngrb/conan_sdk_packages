@@ -6,6 +6,14 @@
 
 The example is taken from the openssl test package in the [Conan Center Index](https://github.com/conan-io/conan-center-index/tree/master/recipes/openssl/1.x.x/test_package).
 
+Note that in call cases, linking OpenSSL is done with these two CMake lines:
+
+```[cmake]
+find_package(OpenSSL REQUIRED)
+
+target_link_libraries(digest OpenSSL::SSL)
+```
+
 ### Pure CMAKE
 
 Consume the system library using pure CMake.
