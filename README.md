@@ -88,7 +88,7 @@ cd consumer_cci
 conan create .
 cd ..
 cd consumer_system
-conan create . --build=missing # digest_lib should be re-built
+conan create . --build=digest_consumer_system --build=digest_lib # digest_lib should be re-built
 ```
 
 Result:
@@ -101,6 +101,7 @@ Conditions:
 
 * "system" package should have the same name as the CCI package so that override works
 * the (most iumportant) options of the CCI package should be reflected in the dummy package (here: option *shared*)
+* In order to have a real rebuild of the intermediate library, the intermediate lib should use the full_package_mode for the openssl lib. Alternatively, the version can be changed so something non-semver (I use "system" as version, not as channel). But then, the version reflection in `openssl_version = tools.Version(self.deps_cpp_info["openssl"].version)` would no longer work. And of course any version ranges specified by the consumer.
 
 ## License
 

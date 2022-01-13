@@ -10,8 +10,8 @@ class DummyOpenSslConan(ConanFile):
     default_channel = "stable"
     settings = "os"
     exports = "*"
-    options = { "shared_openssl": [True, False] }
-    default_options = { "shared_openssl": False }
+    options = { "shared": [True, False] }
+    default_options = { "shared": False }
 
     def set_version(self):
         shcmd="openssl version | cut -d ' ' -f 2"
@@ -35,7 +35,7 @@ class DummyOpenSslConan(ConanFile):
     def package_info(self):
         self.cpp_info.names["cmake_find_package"] = "OpenSSL"
         self.cpp_info.names["cmake_find_package_multi"] = "OpenSSL"
-        if self.options.shared_openssl:
+        if self.options.shared:
             self.cpp_info.components["ssl"].libs = ['ssl']
             self.cpp_info.components["crypto"].libs = ['crypto']
         else:
